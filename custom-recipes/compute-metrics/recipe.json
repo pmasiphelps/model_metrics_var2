@@ -1,0 +1,139 @@
+{
+    "meta" : {
+        "label" : "Dataset Model Metrics Var2",
+        "description" : "Classification:  Precision, Recall, Accuracy, ROC AUC, F1 Score, Hamming Loss, Log Loss, Lift \n Regression: Explained Variance Score (EVS), Mean Absolute Error (MAE), Mean Squared Error (MSE), Mean Squared Log Error (MSLE), Root Mean Squared Error (RMSE), Root Mean Squared Log Error (RMSLE), R2, Pearson Correlation Coefficient, Pearson Correlation P-Value \n",
+        "icon" : "icon-dashboard"
+    },
+
+    "kind" : "PYTHON",
+
+    "inputRoles" : [
+        {
+            "name": "input_dataset",
+            "label": "The Dataset to Score",
+            "description": "This Dataset Should have target variable labels and predictions (if classification, then probabilities)",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        },
+        {
+            "name": "trained_model",
+            "label": "Optional: Saved Model",
+            "description": "Optional: The Model that was used to score the dataset. Must be trained with K-Fold Validation.",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsSavedModel": true
+        }
+        
+    ],
+
+    "outputRoles" : [
+        {
+            "name": "metrics",
+            "label": "Evaluation Metrics",
+            "description": "Classification or Regression metrics",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        },
+        {
+            "name": "metrics_folder",
+            "label": "Performance Metrics Folder",
+            "description": "Folder containing Confusion Matrices and ROC Curves",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+
+    "params": [
+        {
+            "name": "prediction_type",
+            "label": "Regression or Classification",
+            "type": "SELECT",
+            "selectChoices" : [
+                { "value" : "regression", "label" : "Regression"},
+                { "value" : "classification", "label" : "Classification"}
+            ],
+            "mandatory": true
+        },
+        {
+            "name": "target_actual_col",
+            "label": "Target Column",
+            "type": "COLUMN",
+            "columnRole":"input_dataset"
+        },
+        {
+            "name": "classification_predictions_or_probabilities",
+            "label": "Just Preds or Probs",
+            "type": "SELECT",
+            "selectChoices" : [
+                { "value" : "just_predictions", "label" : "Just Class Predictions"},
+                { "value" : "probabilities", "label" : "Class Probabilities"}
+            ],
+            "visibilityCondition" : "model.prediction_type == 'classification'"
+        },
+        {
+            "name": "prediction_probability_col",
+            "label": "Prediction Probabilities Column",
+            "type": "COLUMN",
+            "columnRole":"input_dataset",
+            "visibilityCondition" : "model.classification_predictions_or_probabilities == 'probabilities'"
+        },
+        {
+            "name": "probability_threshold",
+            "label": "Probability Threshold",
+            "type": "DOUBLE",
+            "defaultValue" : .5,
+            "visibilityCondition" : "model.classification_predictions_or_probabilities == 'probabilities'"
+        },
+        {
+            "name": "prediction_class_col",
+            "label": "Prediction Class Colummn",
+            "type": "COLUMN",
+            "columnRole":"input_dataset",
+            "visibilityCondition" : "model.classification_predictions_or_probabilities == 'just_predictions'"
+        },
+        {
+            "name": "prediction_col",
+            "label": "Predictions Column Name",
+            "type": "COLUMN",
+            "columnRole":"input_dataset",
+            "visibilityCondition" : "model.prediction_type == 'regression'"
+        },
+        {
+            "name": "model_drift_time",
+            "label": "Calculate model drift over time?",
+            "type": "SELECT",
+            "selectChoices" : [
+                { "value" : "none", "label" : "None"},
+                { "value" : "yearly", "label" : "Yearly"},
+                { "value" : "monthly", "label" : "Monthly"},
+                { "value" : "weekly", "label" : "Weekly"},
+                { "value" : "daily", "label" : "Daily"}
+            ],
+            "mandatory": false
+        },
+        {
+            "name": "model_drift_time_col",
+            "label": "Timestamp Column",
+            "type": "COLUMN",
+            "columnRole":"input_dataset",
+            "visibilityCondition" : "model.model_drift_time != 'none'"
+        },
+        {
+            "name": "categorical_breakdown_col",
+            "label": "Categorical Column Breakdown",
+            "type": "COLUMN",
+            "columnRole":"input_dataset",
+            "visibilityCondition" : "model.model_drift_time == 'none'"
+        }
+        
+        
+
+    ],
+
+    "resourceKeys" : []
+
+}

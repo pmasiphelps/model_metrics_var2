@@ -1,0 +1,32 @@
+// This file is the descriptor for the DSS Plugin model_metrics
+{
+    // The identifier of the plugin.
+    // This must be globally unique, and only contain A-Za-z0-9_-
+    // BEWARE: Changing this value is a dangerous operation and
+    // needs manual administrator intervention to fix directory names
+    "id" : "model_metrics_var2",
+
+    // Version. It is highly recommended to use Semantic Versioning
+    "version" : "0.0.1",
+
+
+    // Meta data for display purposes
+    "meta" : {
+        // Name of this plugin that appears in the interface.
+        "label" : "Dataset Model Metrics Variation 2",
+
+        "description" : "Calculate model performance metrics on an arbitrary dataset. \n Requirements: \n Regression: column with target actual values, column with target predictions \n Classification: column with target actual classes, column with predicted class probabilities",
+        "author" : "Patrick Masi-Phelps (Dataiku)",
+
+        // The icon of a plugin must be one of the FontAwesome 3.1 icons
+        "icon" : "icon-dashboard",
+
+        "licenseInfo" : "Apache Software License",
+
+        // URL where the user can learn more about the plugin
+        "url" : "https://www.dataiku.com",
+
+        // List of tags for filtering the list of plugins
+        "tags" : ["machinelearning", "metrics"]
+    }
+}
